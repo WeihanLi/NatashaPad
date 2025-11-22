@@ -1,17 +1,16 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging.Abstractions;
 using NatashaPad.Mvvm;
 using NatashaPad.ViewModels.Base;
 using NuGet.Versioning;
-using Prism.Commands;
 using ReferenceResolver;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Input;
-using WeihanLi.Extensions;
+using System.Threading.Tasks;
 
 namespace NatashaPad.ViewModels;
 
@@ -25,22 +24,26 @@ internal partial class NugetManageViewModel : DialogViewModelBase
         IEnumerable<InstalledPackage> installedPackages) : base(commonParam)
     {
         InstalledPackages = new RemovableCollection<InstalledPackage>();
-        installedPackages.ForEach(x => InstalledPackages.Add(x));
+        foreach (var package in installedPackages)
+        {
+            InstalledPackages.Add(package);
+        }
 
         SearchedPackages = new ObservableCollection<SearchedPackage>();
 
-        Sources = _nugetHelper.GetSources().Select(x => x.Name.GetValueOrDefault(x.Source)).ToArray();
-        SearchCommand = new DelegateCommand(async () => await SearchAsync());
+        Sources = _nugetHelper.GetSources()
+            .Select(x => string.IsNullOrWhiteSpace(x.Name) ? x.Source : x.Name)
+            .ToArray();
+        SearchCommand = new AsyncRelayCommand(SearchAsync);
     }
 
     protected override async Task OkAsync()
     {
         if (InstalledPackages.Count > 0)
         {
-            await InstalledPackages.Select(p => _nugetHelper.DownloadPackage(p.Name, NuGetVersion.Parse(p.Version)))
-                    .WhenAll()
-                    .ConfigureAwait(false)
-                ;
+            var downloads = InstalledPackages
+                .Select(p => _nugetHelper.DownloadPackage(p.Name, NuGetVersion.Parse(p.Version)));
+            await Task.WhenAll(downloads).ConfigureAwait(false);
         }
         await base.OkAsync();
     }
@@ -72,7 +75,7 @@ internal partial class NugetManageViewModel : DialogViewModelBase
         set => SetProperty(ref _searchText, value);
     }
 
-    public ICommand SearchCommand { get; }
+    public IAsyncRelayCommand SearchCommand { get; }
 
     private async Task SearchAsync()
     {
@@ -102,9 +105,11 @@ internal partial class NugetManageViewModel : DialogViewModelBase
             // TODO: we may want to show the source where the version comes from
             var pkg = new SearchedPackage(name,
                 versionBuffer.Select(x => x.Version.ToString()).ToArray());
-            pkg.InstallCommand = new DelegateCommand(
+            var installCommand = new RelayCommand(
                 () => InstallPackage(pkg),
                 () => CanInstallPackage(pkg));
+            pkg.InstallCommand = installCommand;
+            installCommand.NotifyCanExecuteChanged();
 
             SearchedPackages.Add(pkg);
 

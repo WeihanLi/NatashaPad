@@ -15,13 +15,12 @@
     <PackageReference Include="Avalonia.ReactiveUI" />
     <PackageReference Include="MediatR" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" />
-    <PackageReference Include="Prism.Core" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Semi.Avalonia" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NatashaPad.Core\NatashaPad.Core.csproj" />
-    <ProjectReference Include="..\NatashaPad.Mvvm\NatashaPad.Mvvm.csproj" />
   </ItemGroup>
 
   <ItemGroup>

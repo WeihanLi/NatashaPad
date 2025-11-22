@@ -1,11 +1,11 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
+using CommunityToolkit.Mvvm.Input;
 using NatashaPad.Mvvm;
 using NatashaPad.ViewModels.Base;
-using Prism.Commands;
-using System.Windows.Input;
-using WeihanLi.Extensions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NatashaPad.ViewModels;
 
@@ -16,13 +16,15 @@ internal sealed class UsingManageViewModel : DialogViewModelBase
         IEnumerable<string> namespaces) : base(commonParam)
     {
         AllItems = new RemovableCollection<NamespaceItem>();
-        namespaces.Distinct()
-            .ForEach(x => AllItems.Add(new NamespaceItem(x)));
+        foreach (var item in namespaces.Distinct())
+        {
+            AllItems.Add(new NamespaceItem(item));
+        }
 
-        AddCommand = new DelegateCommand(Add);
+        AddCommand = new RelayCommand(Add);
     }
 
-    public ICommand AddCommand { get; }
+    public IRelayCommand AddCommand { get; }
 
     private void Add()
     {
@@ -38,9 +40,10 @@ internal sealed class UsingManageViewModel : DialogViewModelBase
         var duplicates = AllItems.GroupBy(x => x.Namespace)
             .SelectMany(x => x.Skip(1));
 
-        empties.Concat(duplicates)
-            .ToArray()
-            .ForEach(x => AllItems.Remove(x));
+        foreach (var item in empties.Concat(duplicates).ToArray())
+        {
+            AllItems.Remove(item);
+        }
         return base.OkAsync();
     }
 }

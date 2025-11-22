@@ -1,9 +1,11 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.Generic;
+using System.Linq;
 using NatashaPad.Mvvm;
-using Prism.Mvvm;
-using System.Windows.Input;
 
 namespace NatashaPad.ViewModels;
 
@@ -14,7 +16,7 @@ internal partial class NugetManageViewModel
         string Name { get; }
     }
 
-    internal class SearchedPackage : BindableBase, IPackage
+    internal class SearchedPackage : ObservableObject, IPackage
     {
         public string Name { get; }
 
@@ -33,10 +35,16 @@ internal partial class NugetManageViewModel
         public string SelectedVersion
         {
             get => _selectedVersion;
-            set => SetProperty(ref _selectedVersion, value);
+            set
+            {
+                if (SetProperty(ref _selectedVersion, value))
+                {
+                    InstallCommand?.NotifyCanExecuteChanged();
+                }
+            }
         }
 
-        public ICommand InstallCommand { get; internal set; } = default!;
+        public IRelayCommand? InstallCommand { get; internal set; }
     }
 
     internal class InstalledPackage : CollectionItem, IPackage
@@ -62,6 +70,6 @@ internal partial class NugetManageViewModel
             internal set => SetProperty(ref _version, value);
         }
 
-        public ICommand UninstallCommand => DeleteThisCommand;
+        public IRelayCommand UninstallCommand => DeleteThisCommand;
     }
 }

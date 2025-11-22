@@ -1,4 +1,4 @@
-﻿// Copyright (c) NatashaPad. All rights reserved.
+// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
 using Avalonia.Controls;

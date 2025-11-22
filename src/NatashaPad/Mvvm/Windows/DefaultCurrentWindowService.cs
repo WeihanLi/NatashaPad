@@ -1,4 +1,4 @@
-﻿// Copyright (c) NatashaPad. All rights reserved.
+// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
 using Avalonia.Controls;
@@ -15,6 +15,8 @@ internal class DefaultCurrentWindowService : ICurrentWindowService
         this.window = window;
     }
 
+    public Window Window => window;
+
     public void Close()
     {
         window.Close();
@@ -30,11 +32,9 @@ internal class DefaultCurrentWindowService : ICurrentWindowService
         window.Show();
     }
 
-    public Window Window => window;
-
     public Task ShowDialogAsync(Window? owner = null)
     {
-        // Current window is already visible; no dialog to show.
+        // Current window is already visible; nothing to do.
         return Task.CompletedTask;
     }
 }

@@ -16,12 +16,12 @@
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="$(RoslynPackageVersion)" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-    <PackageVersion Include="Prism.Core" Version="8.1.97" />
     <PackageVersion Include="ReferenceResolver" Version="0.33.0" />
     <PackageVersion Include="Avalonia" Version="11.3.7" />
     <PackageVersion Include="Avalonia.Desktop" Version="11.3.7" />
     <PackageVersion Include="Avalonia.ReactiveUI" Version="11.3.7" />
     <PackageVersion Include="Semi.Avalonia" Version="11.3.7.1" />
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="xunit.v3" Version="3.2.0" />
   </ItemGroup>
 </Project>

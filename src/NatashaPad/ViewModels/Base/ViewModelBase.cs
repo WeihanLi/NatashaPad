@@ -1,17 +1,18 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using NatashaPad.Mvvm.MessageBox;
 using NatashaPad.Mvvm.Windows;
-using Prism.Mvvm;
 using Avalonia.Threading;
 using System.Threading.Tasks;
 
 namespace NatashaPad.ViewModels.Base;
 
-public abstract class ViewModelBase : BindableBase
+public abstract class ViewModelBase : ObservableObject
 {
     protected readonly CommonParam commonParam;
 
@@ -31,7 +32,7 @@ public abstract class ViewModelBase : BindableBase
 
     protected void ShowMessage(string message)
     {
-        GetService<IErrorMessageBoxService>().Show(message);
+        GetService<IErrorMessageBoxService>().ShowError("执行发生异常", message);
     }
 
     protected IWindowManager WindowManager => commonParam.WindowManager;

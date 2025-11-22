@@ -1,7 +1,8 @@
-﻿// Copyright (c) NatashaPad. All rights reserved.
+// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
 using Avalonia.Controls;
+using System.Collections;
 using System.Collections.ObjectModel;
 
 namespace NatashaPad.Mvvm;
@@ -34,21 +35,24 @@ public sealed class RegisterInfo
         Name = name;
     }
 
-    public RegisterInfo(Type viewType, Type viewModelType) : this(viewType, viewModelType, string.Empty)
+    public RegisterInfo(Type viewType, Type viewModelType)
+        : this(viewType, viewModelType, string.Empty)
     {
     }
 
     public string Name { get; }
 
     public Type ViewType { get; }
+
     public Type ViewModelType { get; }
 
-    public ViewInfo ViewInfo { get; set; }
+    public ViewInfo ViewInfo { get; set; } = new();
 }
 
 public class ViewInfo
 {
     public double? Width { get; set; }
+
     public double? Height { get; set; }
 
     public string? Title { get; set; }

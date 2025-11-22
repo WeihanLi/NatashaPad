@@ -1,4 +1,4 @@
-﻿// Copyright (c) NatashaPad. All rights reserved.
+// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
 using Avalonia.Controls;
@@ -9,6 +9,7 @@ internal class DefaultWindowManager : IWindowManager
 {
     private readonly IViewInstanceLocator locator;
     private readonly IWindowProvider windowProvider;
+    private readonly Dictionary<object, Window> windowMap;
 
     public DefaultWindowManager(
         IViewInstanceLocator locator,
@@ -16,17 +17,14 @@ internal class DefaultWindowManager : IWindowManager
     {
         this.locator = locator;
         this.windowProvider = windowProvider;
-
         windowMap = new Dictionary<object, Window>();
     }
 
-    private readonly Dictionary<object, Window> windowMap;
-
     public ICurrentWindowService GetCurrent<TViewModel>(TViewModel viewModel)
     {
-        if (!windowMap.TryGetValue(viewModel, out var window))
+        if (!windowMap.TryGetValue(viewModel!, out var window))
         {
-            throw new ArgumentException(Properties.Resource.FoundNoWindowErrorString);
+            throw new ArgumentException("No open window is associated with the provided view model instance.", nameof(viewModel));
         }
 
         return new DefaultCurrentWindowService(window);
@@ -35,39 +33,38 @@ internal class DefaultWindowManager : IWindowManager
     public IDialogService GetDialogService<TViewModel>(TViewModel viewModel)
     {
         var view = locator.GetView(typeof(TViewModel));
-        var window = windowProvider.Create(view, viewModel);
+        var window = windowProvider.Create(view, viewModel!);
         window.Closed += Window_Closed;
 
-        windowMap[viewModel] = window;
+        windowMap[viewModel!] = window;
         return new DefaultDialogService(window);
     }
 
-    private void Window_Closed(object sender, EventArgs e)
+    public IWindowService GetWindowService<TViewModel>(TViewModel viewModel)
+    {
+        return GetDialogService(viewModel);
+    }
+
+    private void Window_Closed(object? sender, EventArgs e)
     {
         if (sender is Window window)
         {
             window.Closed -= Window_Closed;
         }
 
-        windowMap.Remove(GetViewModel());
-
-        object GetViewModel()
-        {
-            foreach (var pair in windowMap)
-            {
-                if (pair.Value == sender)
-                {
-                    return pair.Key;
-                }
-            }
-
-            //关闭窗口时，找不到注册信息？
-            throw new NotImplementedException();
-        }
+        windowMap.Remove(FindViewModel(sender));
     }
 
-    public IWindowService GetWindowService<TViewModel>(TViewModel viewModel)
+    private object FindViewModel(object? window)
     {
-        return GetDialogService(viewModel);
+        foreach (var pair in windowMap)
+        {
+            if (Equals(pair.Value, window))
+            {
+                return pair.Key;
+            }
+        }
+
+        throw new InvalidOperationException("Unable to resolve the view model associated with the closed window.");
     }
 }

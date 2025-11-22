@@ -1,4 +1,4 @@
-﻿// Copyright (c) NatashaPad. All rights reserved.
+// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
 using Avalonia;
@@ -52,12 +52,12 @@ internal class DefaultErrorMessageBoxService : IErrorMessageBoxService
 
         var okButton = new Button
         {
-            Content = "OK",
+            Content = "确定",
             HorizontalAlignment = HorizontalAlignment.Right,
             MinWidth = 80
         };
 
-        okButton.Click += (_, args) =>
+        okButton.Click += (_, _) =>
         {
             if (okButton.GetVisualRoot() is Window owner)
             {

@@ -2,10 +2,9 @@
 // Licensed under the Apache license.
 
 using Avalonia.Threading;
+using CommunityToolkit.Mvvm.Input;
 using NatashaPad.ViewModels.Base;
-using Prism.Commands;
 using ReferenceResolver;
-using System.Windows.Input;
 using System.Threading.Tasks;
 using static NatashaPad.ViewModels.NugetManageViewModel;
 
@@ -33,9 +32,9 @@ public class MainViewModel : ViewModelBase
 
         DumpOutHelper.OutputAction += Dump;
 
-        RunCommand = new DelegateCommand(async () => await RunAsync());
-        UsingManageCommand = new DelegateCommand(async () => await UsingManageShowAsync());
-        NugetManageCommand = new DelegateCommand(async () => await NugetManageShowAsync());
+        RunCommand = new AsyncRelayCommand(RunAsync);
+        UsingManageCommand = new AsyncRelayCommand(UsingManageShowAsync);
+        NugetManageCommand = new AsyncRelayCommand(NugetManageShowAsync);
     }
 
     private void Dump(string content)
@@ -74,7 +73,7 @@ public class MainViewModel : ViewModelBase
         set => SetProperty(ref _output, value);
     }
 
-    public ICommand RunCommand { get; }
+    public IAsyncRelayCommand RunCommand { get; }
 
     private async Task RunAsync()
     {
@@ -129,7 +128,7 @@ public class MainViewModel : ViewModelBase
 
     private ICollection<string> _namespaces;
 
-    public ICommand UsingManageCommand { get; }
+    public IAsyncRelayCommand UsingManageCommand { get; }
 
     private async Task UsingManageShowAsync()
     {
@@ -145,7 +144,7 @@ public class MainViewModel : ViewModelBase
 
     private ICollection<NuGetReference> _installedPackages;
 
-    public ICommand NugetManageCommand { get; }
+    public IAsyncRelayCommand NugetManageCommand { get; }
 
     private async Task NugetManageShowAsync()
     {

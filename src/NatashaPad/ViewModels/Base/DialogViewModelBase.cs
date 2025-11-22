@@ -1,8 +1,7 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
-using Prism.Commands;
-using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 
 namespace NatashaPad.ViewModels.Base;
 
@@ -10,8 +9,8 @@ internal abstract class DialogViewModelBase : ViewModelBase
 {
     protected DialogViewModelBase(CommonParam commonParam) : base(commonParam)
     {
-        OkCommand = new DelegateCommand(async () => await OkAsync(), CanOk);
-        CancelCommand = new DelegateCommand(async () => await CancelAsync(), CanCancel);
+        OkCommand = new AsyncRelayCommand(OkAsync, CanOk);
+        CancelCommand = new AsyncRelayCommand(CancelAsync, CanCancel);
     }
 
     /// <summary>
@@ -19,7 +18,7 @@ internal abstract class DialogViewModelBase : ViewModelBase
     /// </summary>
     public bool Succeed { get; protected set; }
 
-    public ICommand OkCommand { get; }
+    public IAsyncRelayCommand OkCommand { get; }
 
     protected virtual Task OkAsync()
     {
@@ -30,7 +29,7 @@ internal abstract class DialogViewModelBase : ViewModelBase
 
     protected virtual bool CanOk() => true;
 
-    public ICommand CancelCommand { get; }
+    public IAsyncRelayCommand CancelCommand { get; }
 
     protected virtual Task CancelAsync()
     {
