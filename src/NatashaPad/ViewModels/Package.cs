@@ -9,7 +9,7 @@ using NatashaPad.Mvvm;
 
 namespace NatashaPad.ViewModels;
 
-internal partial class NugetManageViewModel
+internal partial class NuGetManageViewModel
 {
     internal interface IPackage
     {

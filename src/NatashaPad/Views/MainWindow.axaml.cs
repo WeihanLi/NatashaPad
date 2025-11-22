@@ -8,13 +8,5 @@ namespace NatashaPad.Views;
 
 public partial class MainWindow : Window
 {
-    public MainWindow()
-    {
-        InitializeComponent();
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
+    public MainWindow() => AvaloniaXamlLoader.Load(this);
 }

@@ -15,12 +15,12 @@ using System.Threading.Tasks;
 namespace NatashaPad.ViewModels;
 
 //TODO: 界面加载后即激活搜索框
-internal partial class NugetManageViewModel : DialogViewModelBase
+internal partial class NuGetManageViewModel : DialogViewModelBase
 {
     // TODO: get it via dependency injection
     private readonly INuGetHelper _nugetHelper = new NuGetHelper(NullLoggerFactory.Instance);
     
-    public NugetManageViewModel(CommonParam commonParam,
+    public NuGetManageViewModel(CommonParam commonParam,
         IEnumerable<InstalledPackage> installedPackages) : base(commonParam)
     {
         InstalledPackages = new RemovableCollection<InstalledPackage>();

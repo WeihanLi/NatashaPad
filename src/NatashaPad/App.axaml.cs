@@ -56,12 +56,12 @@ public partial class App : Application
                 opt.WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterScreen;
                 opt.Title = Properties.Resource.UsingManageTitleString;
             });
-            options.Register<NugetManageView, NugetManageViewModel>(opt =>
+            options.Register<NuGetManageView, NuGetManageViewModel>(opt =>
             {
                 opt.Width = 800;
                 opt.Height = 450;
                 opt.WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterScreen;
-                opt.Title = Properties.Resource.NugetManageTitleString;
+                opt.Title = Properties.Resource.NuGetManageTitleString;
             });
         });
     }

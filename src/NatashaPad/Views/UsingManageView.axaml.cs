@@ -8,13 +8,5 @@ namespace NatashaPad.Views;
 
 public partial class UsingManageView : UserControl
 {
-    public UsingManageView()
-    {
-        InitializeComponent();
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
+    public UsingManageView() => AvaloniaXamlLoader.Load(this);
 }

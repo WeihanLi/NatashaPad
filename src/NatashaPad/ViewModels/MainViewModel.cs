@@ -6,7 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using NatashaPad.ViewModels.Base;
 using ReferenceResolver;
 using System.Threading.Tasks;
-using static NatashaPad.ViewModels.NugetManageViewModel;
+using static NatashaPad.ViewModels.NuGetManageViewModel;
 
 namespace NatashaPad.ViewModels;
 
@@ -34,7 +34,7 @@ public class MainViewModel : ViewModelBase
 
         RunCommand = new AsyncRelayCommand(RunAsync);
         UsingManageCommand = new AsyncRelayCommand(UsingManageShowAsync);
-        NugetManageCommand = new AsyncRelayCommand(NugetManageShowAsync);
+        NuGetManageCommand = new AsyncRelayCommand(NuGetManageShowAsync);
     }
 
     private void Dump(string content)
@@ -144,11 +144,11 @@ public class MainViewModel : ViewModelBase
 
     private ICollection<NuGetReference> _installedPackages;
 
-    public IAsyncRelayCommand NugetManageCommand { get; }
+    public IAsyncRelayCommand NuGetManageCommand { get; }
 
-    private async Task NugetManageShowAsync()
+    private async Task NuGetManageShowAsync()
     {
-        var vm = new NugetManageViewModel(commonParam, GetInstalledPackages());
+        var vm = new NuGetManageViewModel(commonParam, GetInstalledPackages());
         await ShowDialogAsync(vm);
         if (vm.Succeed)
         {

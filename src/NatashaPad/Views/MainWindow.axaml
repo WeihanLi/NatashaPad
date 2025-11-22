@@ -55,9 +55,9 @@
           <Button Content="{x:Static res:Resource.UsingManageTitleString}"
                   Theme="{StaticResource OutlineButton}"
                   Command="{Binding UsingManageCommand}" />
-          <Button Content="{x:Static res:Resource.NugetManageTitleString}"
+          <Button Content="{x:Static res:Resource.NuGetManageTitleString}"
                   Theme="{StaticResource OutlineButton}"
-                  Command="{Binding NugetManageCommand}" />
+                  Command="{Binding NuGetManageCommand}" />
         </StackPanel>
       </Grid>
     </Border>

@@ -6,15 +6,7 @@ using Avalonia.Markup.Xaml;
 
 namespace NatashaPad.Views;
 
-public partial class NugetManageView : UserControl
+public partial class NuGetManageView : UserControl
 {
-    public NugetManageView()
-    {
-        InitializeComponent();
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
+    public NuGetManageView() => AvaloniaXamlLoader.Load(this);
 }

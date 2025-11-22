@@ -72,9 +72,9 @@ namespace NatashaPad.Properties {
         /// <summary>
         ///   Looks up a localized string similar to 引用管理.
         /// </summary>
-        public static string NugetManageTitleString {
+        public static string NuGetManageTitleString {
             get {
-                return ResourceManager.GetString("NugetManageTitleString", resourceCulture);
+                return ResourceManager.GetString("NuGetManageTitleString", resourceCulture);
             }
         }
         
