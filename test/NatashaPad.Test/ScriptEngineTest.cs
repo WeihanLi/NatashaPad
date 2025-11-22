@@ -51,7 +51,7 @@ public class ScriptEngineTest : IDisposable
         try
         {
             var options = new NScriptOptions();
-            options.References.Add(new NuGetReference("WeihanLi.Npoi", "2.4.2"));
+            options.References.Add(new NuGetReference("WeihanLi.Npoi", "3.2.0"));
             options.UsingList.Add("WeihanLi.Npoi");
             await _scriptEngine.Execute("CsvHelper.GetCsvText(new[]{1,2,3}).Dump();", options, TestContext.Current.CancellationToken);
         }
@@ -83,7 +83,7 @@ public class ScriptEngineTest : IDisposable
     public async Task EvalTestWithReference()
     {
         var options = new NScriptOptions();
-        options.References.Add(new NuGetReference("WeihanLi.Npoi", "2.4.2"));
+        options.References.Add(new NuGetReference("WeihanLi.Npoi", "3.2.0"));
         options.UsingList.Add("WeihanLi.Npoi");
         var result = await _scriptEngine.Eval("CsvHelper.GetCsvText(Enumerable.Range(1, 3))", options, TestContext.Current.CancellationToken);
         Assert.NotNull(result);
