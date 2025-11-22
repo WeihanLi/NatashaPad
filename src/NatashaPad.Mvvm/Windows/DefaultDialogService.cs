@@ -1,7 +1,10 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
-using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using System.Threading.Tasks;
 
 namespace NatashaPad.Mvvm.Windows;
 
@@ -13,6 +16,8 @@ internal class DefaultDialogService : IDialogService, IWindowService
     {
         this.window = window;
     }
+
+    public Window Window => window;
 
     public void Close()
     {
@@ -29,8 +34,26 @@ internal class DefaultDialogService : IDialogService, IWindowService
         window.Show();
     }
 
-    public void ShowDialog()
+    public async Task ShowDialogAsync(Window? owner = null)
     {
-        window.ShowDialog();
+        owner ??= GetDefaultOwner();
+
+        if (owner is null)
+        {
+            window.Show();
+            return;
+        }
+
+        await window.ShowDialog(owner);
+    }
+
+    private static Window? GetDefaultOwner()
+    {
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            return desktop.MainWindow;
+        }
+
+        return null;
     }
 }

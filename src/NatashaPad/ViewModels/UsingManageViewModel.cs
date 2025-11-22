@@ -62,7 +62,7 @@ internal sealed class NamespaceItem : CollectionItem
 
     internal bool IsEmpty => string.IsNullOrWhiteSpace(_namespace);
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         return obj is NamespaceItem item &&
                _namespace == item._namespace;

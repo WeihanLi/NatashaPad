@@ -11,15 +11,15 @@ public class RemovableCollection<T> : ObservableCollection<T>
     protected override void InsertItem(int index, T item)
     {
         base.InsertItem(index, item);
-        if (item != null)
-        {
-            item.NeedDeleteMe += Item_NeedDeleteMe;
-        }
+        item.NeedDeleteMe += Item_NeedDeleteMe;
     }
 
-    protected virtual void Item_NeedDeleteMe(object sender, EventArgs e)
+    protected virtual void Item_NeedDeleteMe(object? sender, EventArgs e)
     {
-        Remove((T)sender);
+        if (sender is T item)
+        {
+            Remove(item);
+        }
     }
 
     protected override void RemoveItem(int index)

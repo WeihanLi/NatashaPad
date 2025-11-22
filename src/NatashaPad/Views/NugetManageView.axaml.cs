@@ -1,17 +1,20 @@
-﻿// Copyright (c) NatashaPad. All rights reserved.
+// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
-using System.Windows.Controls;
+using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
 
 namespace NatashaPad.Views;
 
-/// <summary>
-/// Interaction logic for NugetManageView.xaml
-/// </summary>
 public partial class NugetManageView : UserControl
 {
     public NugetManageView()
     {
         InitializeComponent();
+    }
+
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
     }
 }

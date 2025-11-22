@@ -1,7 +1,7 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
-using System.Windows;
+using Avalonia.Controls;
 
 namespace NatashaPad.Mvvm.Windows;
 

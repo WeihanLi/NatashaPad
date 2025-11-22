@@ -1,7 +1,7 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
-using System.Windows;
+using Avalonia.Controls;
 
 namespace NatashaPad.Mvvm.Windows;
 
@@ -44,6 +44,11 @@ internal class DefaultWindowManager : IWindowManager
 
     private void Window_Closed(object sender, EventArgs e)
     {
+        if (sender is Window window)
+        {
+            window.Closed -= Window_Closed;
+        }
+
         windowMap.Remove(GetViewModel());
 
         object GetViewModel()

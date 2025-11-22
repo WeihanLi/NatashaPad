@@ -1,7 +1,7 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
-using System.Windows;
+using Avalonia.Controls;
 
 namespace NatashaPad.Mvvm.Windows;
 
@@ -18,7 +18,7 @@ public class DefaultWindowProvider : IWindowProvider
     {
         var viewInfo = viewTypeInfoLocator.GetViewInfo(view.GetType());
 
-        if (!(view is Window window))
+        if (view is not Window window)
         {
             window = new Window
             {
@@ -43,7 +43,10 @@ public class DefaultWindowProvider : IWindowProvider
                 }
 
                 window.WindowStartupLocation = viewInfo.WindowStartupLocation;
-                window.Title = viewInfo.Title;
+                if (!string.IsNullOrEmpty(viewInfo.Title))
+                {
+                    window.Title = viewInfo.Title;
+                }
             }
         }
 

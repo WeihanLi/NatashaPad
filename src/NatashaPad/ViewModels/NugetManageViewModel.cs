@@ -7,7 +7,9 @@ using NatashaPad.ViewModels.Base;
 using NuGet.Versioning;
 using Prism.Commands;
 using ReferenceResolver;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using WeihanLi.Extensions;
 
@@ -46,7 +48,7 @@ internal partial class NugetManageViewModel : DialogViewModelBase
     public ObservableCollection<InstalledPackage> InstalledPackages { get; }
     public ObservableCollection<SearchedPackage> SearchedPackages { get; }
 
-    private string _searchText;
+    private string _searchText = string.Empty;
     private bool _includePrerelease = true;
     private string[] _selectedSources = [];
 
@@ -79,22 +81,27 @@ internal partial class NugetManageViewModel : DialogViewModelBase
             return;
 
         //TODO: 这边都给了默认值。需要在界面上支持用户选择
-        var packagesNames = (
-                await _nugetHelper.SearchPackages(text, _includePrerelease, sources: _selectedSources).ToArrayAsync()
-                )
-            .SelectMany(x => x.SearchResult.Select(r=> r.Identity.Id))
-            .Distinct()
-            ;
+        var packageNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        await foreach (var result in _nugetHelper.SearchPackages(text, _includePrerelease, sources: _selectedSources))
+        {
+            foreach (var metadata in result.SearchResult)
+            {
+                packageNames.Add(metadata.Identity.Id);
+            }
+        }
 
         SearchedPackages.Clear();
-        foreach (var name in packagesNames)
+        foreach (var name in packageNames)
         {
-            var versions = await _nugetHelper.GetPackageVersions(
-                    name, _includePrerelease, false, null, _selectedSources
-                    ).ToArrayAsync();
+            var versionBuffer = new List<NuGetVersion>();
+            await foreach (var versionInfo in _nugetHelper.GetPackageVersions(
+                           name, _includePrerelease, false, null, _selectedSources))
+            {
+                versionBuffer.Add(versionInfo.Version);
+            }
             // TODO: we may want to show the source where the version comes from
             var pkg = new SearchedPackage(name,
-                versions.Select(x => x.Version.ToString()).ToArray());
+                versionBuffer.Select(x => x.Version.ToString()).ToArray());
             pkg.InstallCommand = new DelegateCommand(
                 () => InstallPackage(pkg),
                 () => CanInstallPackage(pkg));

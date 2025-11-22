@@ -1,0 +1,85 @@
+<Window x:Class="NatashaPad.Views.MainWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:NatashaPad.ViewModels"
+        xmlns:res="clr-namespace:NatashaPad.Properties"
+        Title="NatashaPad"
+        Width="960"
+        Height="640"
+        MinWidth="720"
+        MinHeight="520"
+        x:DataType="viewModels:MainViewModel"
+        mc:Ignorable="d">
+  <Grid RowDefinitions="Auto,*">
+    <Border Grid.Row="0"
+            Margin="16"
+            Padding="12"
+            Theme="{DynamicResource CardBorder}">
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Orientation="Horizontal"
+                    Spacing="12"
+                    VerticalAlignment="Center">
+          <TextBlock Text="NatashaPad"
+                     Classes="H5"
+                     VerticalAlignment="Center" />
+        </StackPanel>
+        <StackPanel Grid.Column="1"
+                    Orientation="Horizontal"
+                    Spacing="8"
+                    VerticalAlignment="Center">
+          <Button Content="{x:Static res:Resource.UsingManageTitleString}"
+                  Theme="{StaticResource SolidButton}"
+                  Classes="Primary"
+                  Command="{Binding UsingManageCommand}" />
+          <Button Content="{x:Static res:Resource.NugetManageTitleString}"
+                  Theme="{StaticResource SolidButton}"
+                  Classes="Secondary"
+                  Command="{Binding NugetManageCommand}" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <Grid Grid.Row="1"
+          Margin="16"
+          RowDefinitions="*,Auto,*">
+      <Border Margin="0,0,0,16"
+              Padding="12"
+              Theme="{DynamicResource CardBorder}">
+        <TextBox AcceptsReturn="True" TextWrapping="Wrap" MinHeight="200"
+                 Watermark="输入源代码"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 FontFamily="Consolas"
+                 FontSize="14"
+                 Text="{Binding Input}" />
+      </Border>
+
+      <StackPanel Grid.Row="1"
+                  Orientation="Horizontal"
+                  HorizontalAlignment="Right"
+                  Spacing="12"
+                  Margin="0,0,0,16">
+        <Button Content="运行"
+                Theme="{StaticResource SolidButton}"
+                Classes="Primary"
+                Width="96"
+                Command="{Binding RunCommand}" />
+      </StackPanel>
+
+      <Border Grid.Row="2"
+              Padding="12"
+              Theme="{DynamicResource CardBorder}">
+        <TextBlock
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 TextWrapping="Wrap"
+                 FontFamily="Consolas"
+                 FontSize="14"
+                 MinHeight="200"
+                 Text="{Binding Output}" />
+      </Border>
+    </Grid>
+  </Grid>
+</Window>

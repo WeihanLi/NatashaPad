@@ -1,8 +1,8 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
+using Avalonia.Controls;
 using System.Collections.ObjectModel;
-using System.Windows;
 
 namespace NatashaPad.Mvvm;
 
@@ -13,7 +13,7 @@ public class ViewContainerOptions : Collection<RegisterInfo>
         Add(new RegisterInfo(typeof(TView), typeof(TViewModel)));
     }
 
-    public void Register<TView, TViewModel>(Action<ViewInfo> action)
+    public void Register<TView, TViewModel>(Action<ViewInfo>? action)
     {
         var reg = new RegisterInfo(typeof(TView), typeof(TViewModel));
 
@@ -48,10 +48,10 @@ public sealed class RegisterInfo
 
 public class ViewInfo
 {
-    public int? Width { get; set; }
-    public int? Height { get; set; }
+    public double? Width { get; set; }
+    public double? Height { get; set; }
 
-    public string Title { get; set; }
+    public string? Title { get; set; }
 
     public WindowStartupLocation WindowStartupLocation { get; set; } = WindowStartupLocation.Manual;
 

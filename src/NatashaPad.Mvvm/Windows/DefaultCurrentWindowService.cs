@@ -1,7 +1,8 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
-using System.Windows;
+using Avalonia.Controls;
+using System.Threading.Tasks;
 
 namespace NatashaPad.Mvvm.Windows;
 
@@ -27,5 +28,13 @@ internal class DefaultCurrentWindowService : ICurrentWindowService
     public void Show()
     {
         window.Show();
+    }
+
+    public Window Window => window;
+
+    public Task ShowDialogAsync(Window? owner = null)
+    {
+        // Current window is already visible; no dialog to show.
+        return Task.CompletedTask;
     }
 }

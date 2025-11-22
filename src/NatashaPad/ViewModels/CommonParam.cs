@@ -1,9 +1,9 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
+using Avalonia.Threading;
 using MediatR;
 using NatashaPad.Mvvm.Windows;
-using System.Windows.Threading;
 
 namespace NatashaPad.ViewModels;
 

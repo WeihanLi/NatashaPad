@@ -23,12 +23,12 @@ internal partial class NugetManageViewModel
         {
             Name = name;
             Versions = versions.Reverse().ToArray();
-            _selectedVersion = Versions.FirstOrDefault();
+            _selectedVersion = Versions.FirstOrDefault() ?? string.Empty;
         }
 
         public IEnumerable<string> Versions { get; }
 
-        private string _selectedVersion;
+        private string _selectedVersion = string.Empty;
 
         public string SelectedVersion
         {
@@ -36,7 +36,7 @@ internal partial class NugetManageViewModel
             set => SetProperty(ref _selectedVersion, value);
         }
 
-        public ICommand InstallCommand { get; internal set; }
+        public ICommand InstallCommand { get; internal set; } = default!;
     }
 
     internal class InstalledPackage : CollectionItem, IPackage
@@ -54,7 +54,7 @@ internal partial class NugetManageViewModel
             : this(searchedPackage.Name, searchedPackage.SelectedVersion)
         { }
 
-        private string _version;
+        private string _version = string.Empty;
 
         public string Version
         {

@@ -1,11 +1,12 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
+using Avalonia.Threading;
 using NatashaPad.ViewModels.Base;
 using Prism.Commands;
 using ReferenceResolver;
 using System.Windows.Input;
-using System.Windows.Threading;
+using System.Threading.Tasks;
 using static NatashaPad.ViewModels.NugetManageViewModel;
 
 namespace NatashaPad.ViewModels;
@@ -33,8 +34,8 @@ public class MainViewModel : ViewModelBase
         DumpOutHelper.OutputAction += Dump;
 
         RunCommand = new DelegateCommand(async () => await RunAsync());
-        UsingManageCommand = new DelegateCommand(UsingManageShow);
-        NugetManageCommand = new DelegateCommand(NugetManageShow);
+        UsingManageCommand = new DelegateCommand(async () => await UsingManageShowAsync());
+        NugetManageCommand = new DelegateCommand(async () => await NugetManageShowAsync());
     }
 
     private void Dump(string content)
@@ -51,13 +52,13 @@ public class MainViewModel : ViewModelBase
         }
         else
         {
-            Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)Do);
+            Dispatcher.Post(Do, DispatcherPriority.Background);
         }
 
         void Do() => Output += $"{content}{Environment.NewLine}";
     }
 
-    private string _input;
+    private string _input = string.Empty;
 
     public string Input
     {
@@ -65,7 +66,7 @@ public class MainViewModel : ViewModelBase
         set => SetProperty(ref _input, value);
     }
 
-    private string _output;
+    private string _output = string.Empty;
 
     public string Output
     {
@@ -130,10 +131,10 @@ public class MainViewModel : ViewModelBase
 
     public ICommand UsingManageCommand { get; }
 
-    private void UsingManageShow()
+    private async Task UsingManageShowAsync()
     {
         var vm = new UsingManageViewModel(commonParam, _namespaces);
-        ShowDialog(vm);
+        await ShowDialogAsync(vm);
         if (vm.Succeed)
         {
             _namespaces = vm.AllItems
@@ -146,10 +147,10 @@ public class MainViewModel : ViewModelBase
 
     public ICommand NugetManageCommand { get; }
 
-    private void NugetManageShow()
+    private async Task NugetManageShowAsync()
     {
         var vm = new NugetManageViewModel(commonParam, GetInstalledPackages());
-        ShowDialog(vm);
+        await ShowDialogAsync(vm);
         if (vm.Succeed)
         {
             _installedPackages = GetUpdatedResolvers();
@@ -162,7 +163,7 @@ public class MainViewModel : ViewModelBase
             foreach(var package in _installedPackages)
             {
                 var (packageId, packageVersion, _) = package;
-                packages[idx] = new InstalledPackage(packageId, packageVersion); 
+                packages[idx] = new InstalledPackage(packageId, packageVersion ?? string.Empty); 
             }
             return packages;
         }

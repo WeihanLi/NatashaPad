@@ -9,7 +9,6 @@
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <PackageVersion Include="DotNetCore.Compile.Environment" Version="3.2.0" />
     <PackageVersion Include="DotNetCore.Natasha.CSharp" Version="5.2.2.1" />
-    <PackageVersion Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageVersion Include="MediatR" Version="11.1.0" />
     <PackageVersion Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Features" Version="$(RoslynPackageVersion)" />
@@ -19,6 +18,10 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
     <PackageVersion Include="Prism.Core" Version="8.1.97" />
     <PackageVersion Include="ReferenceResolver" Version="0.33.0" />
+    <PackageVersion Include="Avalonia" Version="11.3.7" />
+    <PackageVersion Include="Avalonia.Desktop" Version="11.3.7" />
+    <PackageVersion Include="Avalonia.ReactiveUI" Version="11.3.7" />
+    <PackageVersion Include="Semi.Avalonia" Version="11.3.7.1" />
     <PackageVersion Include="xunit.v3" Version="3.2.0" />
   </ItemGroup>
 </Project>
