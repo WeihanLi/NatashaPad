@@ -162,7 +162,7 @@ public class MainViewModel : ViewModelBase
             foreach(var package in _installedPackages)
             {
                 var (packageId, packageVersion, _) = package;
-                packages[idx] = new InstalledPackage(packageId, packageVersion ?? string.Empty); 
+                packages[idx++] = new InstalledPackage(packageId, packageVersion ?? string.Empty); 
             }
             return packages;
         }
