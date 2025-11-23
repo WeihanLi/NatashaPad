@@ -2,7 +2,7 @@
 
 ## Core
 
-- [x] Nuget Reference Support
+- [x] NuGet Reference Support
 
 ## Editor features
 

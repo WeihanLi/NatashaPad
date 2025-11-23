@@ -1,5 +1,7 @@
-﻿// Copyright (c) NatashaPad. All rights reserved.
+// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace NatashaPad.Mvvm;
 
@@ -24,9 +26,7 @@ internal class DefaultViewContainer : IViewTypeInfoLocator
     {
         if (!vmToviewMap.TryGetValue(vmType, out var type))
         {
-            throw new KeyNotFoundException(
-                string.Format(Properties.Resource.CannotFindMatchedViewTypeOfFormatString,
-                    vmType.Name));
+            throw new KeyNotFoundException($"No view type registered for view model '{vmType.Name}'.");
         }
 
         return type;
@@ -36,9 +36,7 @@ internal class DefaultViewContainer : IViewTypeInfoLocator
     {
         if (!viewToInfoMap.TryGetValue(viewType, out var info))
         {
-            throw new KeyNotFoundException(
-                string.Format(Properties.Resource.CannotFindMatchedViewInfoOfFormatString,
-                    viewType.Name));
+            throw new KeyNotFoundException($"No view metadata registered for view '{viewType.Name}'.");
         }
 
         return info;
@@ -60,6 +58,6 @@ internal class DefaultViewLocator : IViewInstanceLocator
 
     public object GetView(Type viewModelType)
     {
-        return serviceProvider.GetService(viewLocator.GetView(viewModelType));
+        return serviceProvider.GetRequiredService(viewLocator.GetView(viewModelType));
     }
 }

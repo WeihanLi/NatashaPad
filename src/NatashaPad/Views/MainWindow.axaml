@@ -1,0 +1,140 @@
+<Window x:Class="NatashaPad.Views.MainWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:NatashaPad.ViewModels"
+        xmlns:res="clr-namespace:NatashaPad.Properties"
+        xmlns:semi="https://irihi.tech/semi"
+        Title="NatashaPad"
+        Width="1024"
+        Height="680"
+        MinWidth="780"
+        MinHeight="540"
+        x:DataType="viewModels:MainViewModel"
+        mc:Ignorable="d">
+  <Grid RowDefinitions="Auto,*">
+    <Border Grid.Row="0"
+            Margin="16"
+            Padding="16"
+            Theme="{DynamicResource CardBorder}">
+      <Grid ColumnDefinitions="Auto,*,Auto"
+            ColumnSpacing="16"
+            VerticalAlignment="Center">
+        <StackPanel Orientation="Horizontal"
+                    Spacing="12"
+                    VerticalAlignment="Center">
+          <Border Width="40"
+                  Height="40"
+                  CornerRadius="20"
+                  Background="{DynamicResource SemiColorBg5}">
+            <PathIcon Margin="10"
+                      Data="M6 4L20 12L6 20Z"
+                      Foreground="{DynamicResource SemiColorText2}" />
+          </Border>
+          <StackPanel Spacing="4">
+            <TextBlock Text="NatashaPad"
+                       Classes="H5" />
+            <TextBlock Text="快速运行与实验 C# 代码片段"
+                       Classes="Caption"
+                       Foreground="{DynamicResource SemiColorText3}" />
+          </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2"
+                    Orientation="Horizontal"
+                    Spacing="8"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center">
+          <Button Content="运行"
+                  Theme="{StaticResource SolidButton}"
+                  Classes="Primary"
+                  Width="108"
+                  Command="{Binding RunCommand}">
+          </Button>
+          <Button Content="{x:Static res:Resource.UsingManageTitleString}"
+                  Theme="{StaticResource OutlineButton}"
+                  Command="{Binding UsingManageCommand}" />
+          <Button Content="{x:Static res:Resource.NuGetManageTitleString}"
+                  Theme="{StaticResource OutlineButton}"
+                  Command="{Binding NuGetManageCommand}" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <Grid Grid.Row="1"
+          Margin="2"
+          ColumnDefinitions="3*,Auto,2*"
+          ColumnSpacing="0">
+      <Border Grid.Column="0"
+              Theme="{DynamicResource CardBorder}">
+        <TextBox AcceptsReturn="True"
+                 TextWrapping="Wrap"
+                 HorizontalContentAlignment="Left"
+                 Watermark="输入源代码"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 FontFamily="Consolas"
+                 FontSize="14"
+                 MinHeight="410"
+                 Text="{Binding Input}" />
+      </Border>
+
+      <GridSplitter Grid.Column="1"
+                    Width="6"
+                    HorizontalAlignment="Center"
+                    Cursor="SizeWestEast"
+                    Background="{DynamicResource SemiColorBg4}" />
+
+      <Grid Grid.Column="2"
+            RowDefinitions="*,Auto">
+        <Border Theme="{DynamicResource CardBorder}">
+          <TextBox IsReadOnly="True"
+                   TextWrapping="Wrap"
+                   MinHeight="350"
+                   Watermark="等待运行结果..."
+                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                   ScrollViewer.VerticalScrollBarVisibility="Auto"
+                   FontFamily="Consolas"
+                   FontSize="14"
+                   Text="{Binding Output}" />
+        </Border>
+
+        <Border Grid.Row="1"
+                Padding="4"
+                Theme="{DynamicResource CardBorder}">
+          <Grid ColumnDefinitions="*,*,*"
+                ColumnSpacing="12"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center">
+            <StackPanel Grid.Column="0"
+                        Spacing="4">
+              <TextBlock Text="输入字符数"
+                         Classes="Caption"
+                         Foreground="{DynamicResource SemiColorText3}" />
+              <TextBlock Text="{Binding Input.Length, StringFormat='{}{0:N0}'}"
+                         FontWeight="SemiBold" />
+            </StackPanel>
+            <StackPanel Grid.Column="1"
+                        Spacing="4">
+              <TextBlock Text="输出字符数"
+                         Classes="Caption"
+                         Foreground="{DynamicResource SemiColorText3}" />
+              <TextBlock Text="{Binding Output.Length, StringFormat='{}{0:N0}'}"
+                         FontWeight="SemiBold" />
+            </StackPanel>
+            <StackPanel Grid.Column="2"
+                        Spacing="4">
+              <TextBlock Text="运行状态"
+                         Classes="Caption"
+                         Foreground="{DynamicResource SemiColorText3}" />
+              <TextBlock Text="{Binding RunCommand.IsRunning, StringFormat='运行中: {0}'}"
+                         FontWeight="SemiBold"
+                         d:Text="运行中: False" />
+            </StackPanel>
+          </Grid>
+        </Border>
+      </Grid>
+    </Grid>
+  </Grid>
+</Window>

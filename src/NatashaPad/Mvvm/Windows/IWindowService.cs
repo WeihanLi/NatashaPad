@@ -1,5 +1,8 @@
-﻿// Copyright (c) NatashaPad. All rights reserved.
+// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
+
+using Avalonia.Controls;
+using System.Threading.Tasks;
 
 namespace NatashaPad.Mvvm.Windows;
 
@@ -14,16 +17,19 @@ public interface IWindowManager
 
 public interface IWindowService
 {
+    Window Window { get; }
+
     void Show();
 
     void Hide();
 
     void Close();
+
+    Task ShowDialogAsync(Window? owner = null);
 }
 
 public interface IDialogService : IWindowService
 {
-    void ShowDialog();
 }
 
 public interface ICurrentWindowService : IWindowService

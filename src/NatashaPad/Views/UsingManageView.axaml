@@ -1,0 +1,68 @@
+<UserControl x:Class="NatashaPad.Views.UsingManageView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:NatashaPad.ViewModels"
+             x:DataType="viewModels:UsingManageViewModel"
+             mc:Ignorable="d">
+  <Grid RowDefinitions="*,Auto"
+        Margin="16">
+    <Border Grid.Row="0"
+            Padding="16"
+            Theme="{DynamicResource CardBorder}">
+      <Grid RowDefinitions="Auto,*">
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+          <Button Content="新增 Using"
+                  Theme="{StaticResource SolidButton}"
+                  Classes="Primary"
+                  Command="{Binding AddCommand}" />
+        </StackPanel>
+        <ScrollViewer Grid.Row="1"
+                      Margin="0,16,0,0"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+          <ItemsControl ItemsSource="{Binding AllItems}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border Margin="0,0,0,12"
+                        Padding="12"
+                        Theme="{DynamicResource CardBorder}">
+                  <Grid ColumnDefinitions="*,Auto"
+                        VerticalAlignment="Center">
+                    <TextBox Text="{Binding Namespace, Mode=TwoWay}"
+                             Watermark="输入命名空间"
+                             MinWidth="320" />
+                    <Button Grid.Column="1"
+                            Content="删除"
+                            Theme="{StaticResource OutlineButton}"
+                            Classes="Danger"
+                            Margin="12,0,0,0"
+                            Command="{Binding DeleteThisCommand}" />
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+      </Grid>
+    </Border>
+
+    <StackPanel Grid.Row="1"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Spacing="12"
+                Margin="0,16,0,0">
+      <Button Content="取消"
+              Width="96"
+              Theme="{StaticResource OutlineButton}"
+              Command="{Binding CancelCommand}" />
+      <Button Content="确认"
+              Width="96"
+              Theme="{StaticResource SolidButton}"
+              Classes="Primary"
+              Command="{Binding OkCommand}" />
+    </StackPanel>
+  </Grid>
+</UserControl>

@@ -1,16 +1,18 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using NatashaPad.Mvvm.MessageBox;
 using NatashaPad.Mvvm.Windows;
-using Prism.Mvvm;
-using System.Windows.Threading;
+using Avalonia.Threading;
+using System.Threading.Tasks;
 
 namespace NatashaPad.ViewModels.Base;
 
-public abstract class ViewModelBase : BindableBase
+public abstract class ViewModelBase : ObservableObject
 {
     protected readonly CommonParam commonParam;
 
@@ -23,26 +25,25 @@ public abstract class ViewModelBase : BindableBase
     protected Dispatcher Dispatcher => commonParam.Dispatcher;
     protected IServiceProvider ServiceProvider => commonParam.ServiceProvider;
 
-    public T GetService<T>()
+    public T GetService<T>() where T : notnull
     {
-        return ServiceProvider.GetService<T>();
+        return ServiceProvider.GetRequiredService<T>();
     }
 
     protected void ShowMessage(string message)
     {
-        GetService<IErrorMessageBoxService>().Show(message);
+        GetService<IErrorMessageBoxService>().ShowError("执行发生异常", message);
     }
 
     protected IWindowManager WindowManager => commonParam.WindowManager;
 
-    protected T ShowDialog<T>() where T : ViewModelBase
-    {
-        return ShowDialog(GetService<T>());
-    }
+    protected Task<T> ShowDialogAsync<T>() where T : ViewModelBase
+        => ShowDialogAsync(GetService<T>());
 
-    protected T ShowDialog<T>(T vm) where T : ViewModelBase
+    protected async Task<T> ShowDialogAsync<T>(T vm) where T : ViewModelBase
     {
-        WindowManager.GetDialogService(vm).ShowDialog();
+        var dialog = WindowManager.GetDialogService(vm);
+        await dialog.ShowDialogAsync();
         return vm;
     }
 

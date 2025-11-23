@@ -1,20 +1,22 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.Generic;
+using System.Linq;
 using NatashaPad.Mvvm;
-using Prism.Mvvm;
-using System.Windows.Input;
 
 namespace NatashaPad.ViewModels;
 
-internal partial class NugetManageViewModel
+internal partial class NuGetManageViewModel
 {
     internal interface IPackage
     {
         string Name { get; }
     }
 
-    internal class SearchedPackage : BindableBase, IPackage
+    internal class SearchedPackage : ObservableObject, IPackage
     {
         public string Name { get; }
 
@@ -23,20 +25,26 @@ internal partial class NugetManageViewModel
         {
             Name = name;
             Versions = versions.Reverse().ToArray();
-            _selectedVersion = Versions.FirstOrDefault();
+            _selectedVersion = Versions.FirstOrDefault() ?? string.Empty;
         }
 
         public IEnumerable<string> Versions { get; }
 
-        private string _selectedVersion;
+        private string _selectedVersion = string.Empty;
 
         public string SelectedVersion
         {
             get => _selectedVersion;
-            set => SetProperty(ref _selectedVersion, value);
+            set
+            {
+                if (SetProperty(ref _selectedVersion, value))
+                {
+                    InstallCommand?.NotifyCanExecuteChanged();
+                }
+            }
         }
 
-        public ICommand InstallCommand { get; internal set; }
+        public IRelayCommand? InstallCommand { get; internal set; }
     }
 
     internal class InstalledPackage : CollectionItem, IPackage
@@ -54,7 +62,7 @@ internal partial class NugetManageViewModel
             : this(searchedPackage.Name, searchedPackage.SelectedVersion)
         { }
 
-        private string _version;
+        private string _version = string.Empty;
 
         public string Version
         {
@@ -62,6 +70,6 @@ internal partial class NugetManageViewModel
             internal set => SetProperty(ref _version, value);
         }
 
-        public ICommand UninstallCommand => DeleteThisCommand;
+        public IRelayCommand UninstallCommand => DeleteThisCommand;
     }
 }

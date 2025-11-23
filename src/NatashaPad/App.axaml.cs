@@ -1,6 +1,10 @@
-﻿// Copyright (c) NatashaPad. All rights reserved.
+// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -9,21 +13,21 @@ using NatashaPad.Mvvm.Windows;
 using NatashaPad.ViewModels;
 using NatashaPad.Views;
 using ReferenceResolver;
-using System.Windows;
-using System.Windows.Threading;
 using WeihanLi.Common;
 
 namespace NatashaPad;
 
-/// <summary>
-/// Interaction logic for App.xaml
-/// </summary>
 public partial class App : Application
 {
-    protected override void OnStartup(StartupEventArgs e)
+    public override void Initialize()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
+
+    public override void OnFrameworkInitializationCompleted()
     {
         Init();
-        base.OnStartup(e);
+        base.OnFrameworkInitializationCompleted();
     }
 
     private void ConfigureServices(IServiceCollection services)
@@ -39,7 +43,7 @@ public partial class App : Application
 
         services.AddMediatR(typeof(App));
 
-        services.AddSingleton(Dispatcher.CurrentDispatcher);
+        services.AddSingleton(_ => Dispatcher.UIThread);
         services.AddReferenceResolvers();
 
         services.UsingViewLocator(options =>
@@ -49,15 +53,15 @@ public partial class App : Application
             {
                 opt.Width = 600;
                 opt.Height = 400;
-                opt.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                opt.Title = NatashaPad.Properties.Resource.UsingManageTitleString;
+                opt.WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterScreen;
+                opt.Title = Properties.Resource.UsingManageTitleString;
             });
-            options.Register<NugetManageView, NugetManageViewModel>(opt =>
+            options.Register<NuGetManageView, NuGetManageViewModel>(opt =>
             {
                 opt.Width = 800;
                 opt.Height = 450;
-                opt.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                opt.Title = NatashaPad.Properties.Resource.NugetManageTitleString;
+                opt.WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterScreen;
+                opt.Title = Properties.Resource.NuGetManageTitleString;
             });
         });
     }
@@ -68,8 +72,14 @@ public partial class App : Application
         ConfigureServices(services);
         DependencyResolver.SetDependencyResolver(services);
 
-        var windowService = DependencyResolver.ResolveRequiredService<IWindowManager>()
-            .GetWindowService(DependencyResolver.ResolveRequiredService<MainViewModel>());
-        windowService.Show();
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            var windowManager = DependencyResolver.ResolveRequiredService<IWindowManager>();
+            var mainViewModel = DependencyResolver.ResolveRequiredService<MainViewModel>();
+            var windowService = windowManager.GetWindowService(mainViewModel);
+
+            desktop.MainWindow = windowService.Window;
+            windowService.Show();
+        }
     }
 }

@@ -1,18 +1,17 @@
 ﻿// Copyright (c) NatashaPad. All rights reserved.
 // Licensed under the Apache license.
 
-using Prism.Commands;
-using Prism.Mvvm;
-using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace NatashaPad.Mvvm;
 
-public class CollectionItem : BindableBase
+public class CollectionItem : ObservableObject
 {
-    public event EventHandler NeedDeleteMe;
+    public event EventHandler? NeedDeleteMe;
 
-    private ICommand _deleteThisCommand;
-    public ICommand DeleteThisCommand => _deleteThisCommand ??= new DelegateCommand(FireDeleteMe);
+    private IRelayCommand? _deleteThisCommand;
+    public IRelayCommand DeleteThisCommand => _deleteThisCommand ??= new RelayCommand(FireDeleteMe);
 
     private void FireDeleteMe() => NeedDeleteMe?.Invoke(this, EventArgs.Empty);
 }
